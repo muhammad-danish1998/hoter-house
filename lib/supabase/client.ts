@@ -1,13 +1,23 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseKey =
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "";
+  "placeholder-anon-key";
 
-if (!supabaseUrl || !supabaseKey) {
-  console.warn("Supabase public credentials missing in environment variables.");
+if (
+  !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  (!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY &&
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+) {
+  if (typeof window !== "undefined") {
+    console.warn(
+      "Supabase public environment variables (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) are missing."
+    );
+  }
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
